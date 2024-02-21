@@ -14,9 +14,10 @@
  */
 
 import Foundation
+import UIKit
 
 protocol NetworkManagerDelegate{
-    func usersRetrieved(_ networkManager: NetworkManager, response: [Data])
+    func usersRetrieved(_ networkManager: NetworkManager, response: [User])
     func userRetrievedError(error: Error)
 }
 
@@ -24,42 +25,57 @@ class NetworkManager {
     static let shared = NetworkManager()
     private let baseUrl = "https://reqres.in/api/"
     
-//    private init() {}
+    private init() {}
     var delegate: NetworkManagerDelegate?
 
-    var usersResponse = [Data]()
     func getUsers() {
         
         let apiURL = "\(baseUrl)users"
-        print(apiURL)
-        if let url = URL(string: apiURL){
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
-                if let safeError = error{
-                    self.delegate?.userRetrievedError(error: safeError)
-                }
-                if let safeData = data{
-                    let decoder = JSONDecoder()
-                    do{
-                        let decodeData = try decoder.decode(User.self, from: safeData)
-                        for i in decodeData.data.indices{
-                            let id = decodeData.data[i].id
-                            let email = decodeData.data[i].email
-                            let first = decodeData.data[i].first_name
-                            let last = decodeData.data[i].last_name
-                            let avatar = decodeData.data[i].avatar
-                            let userApiData = Data(id: id, email: email, first_name: first, last_name: last, avatar: avatar)
-                            print(userApiData)
-                            self.usersResponse.append(userApiData)
-                        }
-                        self.delegate?.usersRetrieved(self, response: self.usersResponse)
-                    }catch{
-                        print("Error decoding data ")
-                        self.delegate?.userRetrievedError(error: error)
-                    }
-                }
+        
+        guard let url = URL(string: apiURL) else { return }
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            //Handle Errors
+            if let safeError = error{
+                self.delegate?.userRetrievedError(error: safeError)
             }
-            task.resume()
+            
+            //Handle Data
+            guard let safeData = data else{ return }
+            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do{
+                let decodeData = try decoder.decode(UserResponse.self, from: safeData)
+                self.delegate?.usersRetrieved(self, response: decodeData.data)
+            }catch{
+                self.delegate?.userRetrievedError(error: error)
+            }
         }
+        
+        task.resume()
+}
+    
+
+    func getAvatar(for user: User, closure: @escaping (UIImage?) -> ()){
+        
+        guard let url = URL(string: user.avatar) else {
+            closure(nil)
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let safeData = data else {
+                closure(nil)
+                return
+            }
+            
+            let image = UIImage(data: safeData)
+            closure(image)
+        }
+        
+        task.resume()
     }
 }
+

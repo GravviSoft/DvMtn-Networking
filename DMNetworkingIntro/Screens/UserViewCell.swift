@@ -7,29 +7,33 @@
 
 import UIKit
 
-extension UIImageView {
-
-   func setRounded() {
-      let radius = CGRectGetWidth(self.frame) / 2
-      self.layer.cornerRadius = radius
-      self.layer.masksToBounds = true
-   }
-}
-
 class UserViewCell: UITableViewCell {
+
 
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var firstName: UILabel!
     @IBOutlet weak var lastName: UILabel!
     @IBOutlet weak var email: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    func assignData(for user: User){
+        firstName.text = user.firstName
+        lastName.text = user.lastName
+        email.text = user.email
         avatar.setRounded()
+        
+        NetworkManager.shared.getAvatar(for: user) { image in
+            DispatchQueue.main.async{
+                self.avatar.image = image
+            }
+        }
     }
+}
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
+
+extension UIImageView {
+   func setRounded() {
+      let radius = CGRectGetWidth(self.frame) / 2
+      self.layer.cornerRadius = radius
+      self.layer.masksToBounds = true
+   }
 }

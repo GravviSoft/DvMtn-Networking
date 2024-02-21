@@ -18,18 +18,17 @@
 import Foundation
 import UIKit
 
-struct User: Codable {
-    var data: [Data]
-}
-    
-struct Data: Codable {
-    let id: Int
-    let email: String
-    let first_name: String
-    let last_name: String
-    let avatar: String
-}
 
 struct UserResponse: Codable{
     var data: [User]
 }
+    
+struct User: Codable {
+    let id: Int
+    let email: String
+    let firstName: String
+    let lastName: String
+    let avatar: String
+}
+
+
