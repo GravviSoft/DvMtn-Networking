@@ -16,6 +16,7 @@
 		63485F5D29E47CCE00961EA6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63485F5C29E47CCE00961EA6 /* Constants.swift */; };
 		63485F5F29E4800300961EA6 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63485F5E29E4800300961EA6 /* NetworkManager.swift */; };
 		63485F6129E480AD00961EA6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63485F6029E480AD00961EA6 /* User.swift */; };
+		C12FD2CC2B868BC70014DE7C /* DMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12FD2CB2B868BC70014DE7C /* DMError.swift */; };
 		C1B4D1412B7FC326007FAEB5 /* UserViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4D13F2B7FC326007FAEB5 /* UserViewCell.swift */; };
 		C1B4D1422B7FC326007FAEB5 /* UserViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1B4D1402B7FC326007FAEB5 /* UserViewCell.xib */; };
 /* End PBXBuildFile section */
@@ -32,6 +33,7 @@
 		63485F5C29E47CCE00961EA6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		63485F5E29E4800300961EA6 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		63485F6029E480AD00961EA6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C12FD2CB2B868BC70014DE7C /* DMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DMError.swift; sourceTree = "<group>"; };
 		C1B4D13F2B7FC326007FAEB5 /* UserViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewCell.swift; sourceTree = "<group>"; };
 		C1B4D1402B7FC326007FAEB5 /* UserViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -79,6 +81,7 @@
 		63485F5629E4796500961EA6 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				C12FD2CB2B868BC70014DE7C /* DMError.swift */,
 				63485F5C29E47CCE00961EA6 /* Constants.swift */,
 			);
 			path = Utilities;
@@ -197,6 +200,7 @@
 				63485F4729E477DB00961EA6 /* UsersViewController.swift in Sources */,
 				C1B4D1412B7FC326007FAEB5 /* UserViewCell.swift in Sources */,
 				63485F4329E477DB00961EA6 /* AppDelegate.swift in Sources */,
+				C12FD2CC2B868BC70014DE7C /* DMError.swift in Sources */,
 				63485F6129E480AD00961EA6 /* User.swift in Sources */,
 				63485F5F29E4800300961EA6 /* NetworkManager.swift in Sources */,
 				63485F4529E477DB00961EA6 /* SceneDelegate.swift in Sources */,

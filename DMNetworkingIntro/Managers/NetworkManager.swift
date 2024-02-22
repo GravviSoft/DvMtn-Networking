@@ -16,41 +16,50 @@
 import Foundation
 import UIKit
 
-protocol NetworkManagerDelegate{
-    func usersRetrieved(_ networkManager: NetworkManager, response: [User])
-    func userRetrievedError(error: Error)
-}
+//protocol NetworkManagerDelegate{
+//    func usersRetrieved(_ networkManager: NetworkManager, response: [User])
+//    func userRetrievedError(error: Error)
+//}
 
 class NetworkManager {
     static let shared = NetworkManager()
     private let baseUrl = "https://reqres.in/api/"
     
     private init() {}
-    var delegate: NetworkManagerDelegate?
+//    var delegate: NetworkManagerDelegate?
 
-    func getUsers() {
+    func getUsers(completion: @escaping (Result<[User], DMError>) -> ()) {
         
         let apiURL = "\(baseUrl)users"
+//        let apiURL = ""
         
-        guard let url = URL(string: apiURL) else { return }
+        guard let url = URL(string: apiURL) else {
+            completion(.failure(.invalidURL))
+            return
+        }
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             //Handle Errors
-            if let safeError = error{
-                self.delegate?.userRetrievedError(error: safeError)
+            if error != nil{
+                completion(.failure(.unableToComplete))
             }
             
             //Handle Data
-            guard let safeData = data else{ return }
+            guard let safeData = data else{
+                completion(.failure(.invalidData))
+                return
+            }
             
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do{
                 let decodeData = try decoder.decode(UserResponse.self, from: safeData)
-                self.delegate?.usersRetrieved(self, response: decodeData.data)
+//                self.delegate?.usersRetrieved(self, response: decodeData.data)
+                completion(.success(decodeData.data))
             }catch{
-                self.delegate?.userRetrievedError(error: error)
+                completion(.failure(.invalidResponse))
+//                self.delegate?.userRetrievedError(error: error)
             }
         }
         
@@ -64,13 +73,12 @@ class NetworkManager {
             closure(nil)
             return
         }
-
+        
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let safeData = data else {
                 closure(nil)
                 return
             }
-            
             let image = UIImage(data: safeData)
             closure(image)
         }

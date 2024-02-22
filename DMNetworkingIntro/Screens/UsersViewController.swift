@@ -15,7 +15,7 @@
 
 import UIKit
 
-class UsersViewController: UIViewController, NetworkManagerDelegate {
+class UsersViewController: UIViewController {
 
     var users = [User]()
     
@@ -23,25 +23,44 @@ class UsersViewController: UIViewController, NetworkManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NetworkManager.shared.delegate = self
         table.dataSource = self
         table.register(UINib(nibName: Constants.nibName, bundle: nil), forCellReuseIdentifier: Constants.userReuseID)
-        NetworkManager.shared.getUsers()
-    }
-    
-    
-    //MARK: - API Response Error
-    func userRetrievedError(error: Error) {
-        print("Error pulling API Data: \(error)")
-    }
-    
-    //MARK: - Api Response Data
-    func usersRetrieved(_ networkManager: NetworkManager, response: [User]) {
-        users = response
-        DispatchQueue.main.async{
-            self.table.reloadData()
+        NetworkManager.shared.getUsers { result in
+            switch result {
+            case .success(let usersArray):
+                self.users = usersArray
+                DispatchQueue.main.async{
+                    self.table.reloadData()
+                }
+            case .failure(let error):
+                DispatchQueue.main.async{
+                    self.presentError(error)
+                }
+                print("\(error): \(error.rawValue)")
+            }
         }
     }
+    //MARK: - API Errors Func
+    func presentError(_ error: DMError){
+        let alertController = UIAlertController(title: "Alert", message: error.rawValue, preferredStyle: .alert)
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .destructive) { (action) in
+        }
+        alertController.addAction(dismissAction)
+        present(alertController, animated: true)
+    }
+//
+//    //MARK: - API Response Error
+//    func userRetrievedError(error: Error) {
+//        print("Error pulling API Data: \(error)")
+//    }
+//    
+//    //MARK: - Api Response Data
+//    func usersRetrieved(_ networkManager: NetworkManager, response: [User]) {
+//        users = response
+//        DispatchQueue.main.async{
+//            self.table.reloadData()
+//        }
+//    }
 }
 
 //MARK: - TableView Data Source
