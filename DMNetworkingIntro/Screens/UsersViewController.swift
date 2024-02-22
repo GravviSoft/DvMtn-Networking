@@ -51,7 +51,6 @@ class UsersViewController: UIViewController {
 //MARK: - TableView Data Source
 extension UsersViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(users.count)
         return users.count
     }
     
