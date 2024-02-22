@@ -25,21 +25,19 @@ class UsersViewController: UIViewController {
         super.viewDidLoad()
         table.dataSource = self
         table.register(UINib(nibName: Constants.nibName, bundle: nil), forCellReuseIdentifier: Constants.userReuseID)
+        
         NetworkManager.shared.getUsers { result in
             switch result {
             case .success(let usersArray):
                 self.users = usersArray
-                DispatchQueue.main.async{
-                    self.table.reloadData()
-                }
+                DispatchQueue.main.async{self.table.reloadData()}
             case .failure(let error):
-                DispatchQueue.main.async{
-                    self.presentError(error)
-                }
+                DispatchQueue.main.async{self.presentError(error)}
                 print("\(error): \(error.rawValue)")
             }
         }
     }
+    
     //MARK: - API Errors Func
     func presentError(_ error: DMError){
         let alertController = UIAlertController(title: "Alert", message: error.rawValue, preferredStyle: .alert)
@@ -48,19 +46,6 @@ class UsersViewController: UIViewController {
         alertController.addAction(dismissAction)
         present(alertController, animated: true)
     }
-//
-//    //MARK: - API Response Error
-//    func userRetrievedError(error: Error) {
-//        print("Error pulling API Data: \(error)")
-//    }
-//    
-//    //MARK: - Api Response Data
-//    func usersRetrieved(_ networkManager: NetworkManager, response: [User]) {
-//        users = response
-//        DispatchQueue.main.async{
-//            self.table.reloadData()
-//        }
-//    }
 }
 
 //MARK: - TableView Data Source
@@ -77,3 +62,17 @@ extension UsersViewController: UITableViewDataSource{
         return cell
     }
 }
+
+
+
+
+//    func userRetrievedError(error: Error) {
+//        print("Error pulling API Data: \(error)")
+//    }
+//
+//    func usersRetrieved(_ networkManager: NetworkManager, response: [User]) {
+//        users = response
+//        DispatchQueue.main.async{
+//            self.table.reloadData()
+//        }
+//    }
